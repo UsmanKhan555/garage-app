@@ -12,4 +12,14 @@ model Customer {
   phone     String
   email     String?
   createdAt DateTime @default(now())
+  vehicles Vehicle[]
+}
+
+model Vehicle {
+  id        Int     @id @default(autoincrement())
+  make      String
+  model     String
+  plateNumber String
+  customerId Int 
+  customer Customer @relation(fields: [customerId], references: [id])
 }
