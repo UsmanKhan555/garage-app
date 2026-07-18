@@ -4,9 +4,9 @@ import { prisma } from '@/lib/prisma'
 export const dynamic = 'force-dynamic'
 
 function formatCurrency(value: number) {
-  return value.toLocaleString('en-US', {
+  return value.toLocaleString('en-AE', {
     style: 'currency',
-    currency: 'USD',
+    currency: 'AED',
   })
 }
 
