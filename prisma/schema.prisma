@@ -13,6 +13,7 @@ model Customer {
   email     String?
   createdAt DateTime @default(now())
   vehicles Vehicle[]
+  invoices Invoice[]
 }
 
 model Vehicle {
@@ -22,4 +23,27 @@ model Vehicle {
   plateNumber String
   customerId Int 
   customer Customer @relation(fields: [customerId], references: [id])
+  invoices Invoice[]
 }
+
+model Invoice {
+  id        Int     @id @default(autoincrement())
+  customerId Int 
+  customer Customer @relation(fields: [customerId], references: [id])
+  vehicleId Int 
+  vehicle Vehicle @relation(fields: [vehicleId], references: [id])
+  status    String @default("unpaid")
+  createdAt DateTime @default(now())
+  items InvoiceItem[]
+}
+
+
+model InvoiceItem {
+  id        Int     @id @default(autoincrement())
+  invoiceId Int     
+  invoice   Invoice @relation(fields:[invoiceId],references:[id])
+  description String
+  price     Decimal
+  quantity  Int @default(1)
+}
+
