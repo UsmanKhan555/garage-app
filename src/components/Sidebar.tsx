@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { signOut } from 'next-auth/react'
 
 const navItems = [
   {
@@ -50,7 +51,11 @@ const navItems = [
   },
 ]
 
-export default function Sidebar() {
+type SidebarProps = {
+  user?: { name?: string | null; email?: string | null } | null
+}
+
+export default function Sidebar({ user }: SidebarProps) {
   const pathname = usePathname()
 
   return (
@@ -92,6 +97,35 @@ export default function Sidebar() {
           )
         })}
       </nav>
+
+      {user && (
+        <div className="border-t border-slate-800 px-4 py-4">
+          <div className="mb-3 px-2">
+            <p className="truncate text-sm font-medium text-white">{user.name}</p>
+            <p className="truncate text-xs text-slate-500">{user.email}</p>
+          </div>
+          <button
+            onClick={() => signOut({ callbackUrl: '/login' })}
+            className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-slate-400 transition-colors hover:bg-slate-800/60 hover:text-white"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="h-5 w-5 shrink-0"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75"
+              />
+            </svg>
+            Log out
+          </button>
+        </div>
+      )}
 
       <div className="border-t border-slate-800 px-6 py-4 text-xs text-slate-500">
         Garage Management

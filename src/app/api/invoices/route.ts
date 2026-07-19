@@ -1,8 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { auth } from '@/auth'
 
 export async function POST(req: NextRequest) {
     try {
+        const session = await auth()
+        if (!session) {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+        }
         const body = await req.json()
         const { customerId, vehicleId, status, items } = body
 
@@ -28,6 +33,10 @@ export async function POST(req: NextRequest) {
 
 export async function GET() {
     try {
+        const session = await auth()
+        if (!session) {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+        }
         const invoices = await prisma.invoice.findMany({
             orderBy: { id: 'desc' },
             include: {
